@@ -1,0 +1,40 @@
+---
+- name: Create GO Path and Directories
+  become: false
+  file:
+    path: "{{ go_path }}/{{ item }}"
+    state: directory
+  with_items:
+    - bin
+    - pkg
+    - src
+
+- name: Create GO Src Directories
+  become: false
+  file:
+    path: "{{ go_path }}/src/{{ item }}"
+    state: directory
+  with_items: golang_additional_src_dirs
+  when: golang_additional_src_dirs is defined
+
+- name: Set GOPATH in profile
+  become: false
+  blockinfile:
+    path: "{{local_user_homedir}}/.profile"
+    marker_begin: "BEGIN GOPATH"
+    marker_end: "END GOPATH"
+    block: |
+      if [ -d "$HOME/code/go" ]; then
+          export GOPATH="$HOME/code/go"
+      fi
+
+- name: Add GO Bin to path
+  become: false
+  blockinfile:
+    path: "{{local_user_homedir}}/.profile"
+    marker_begin: "BEGIN GOBIN"
+    marker_end: "END GOBIN"
+    block: |
+      if [ -d "$HOME/code/go/bin" ]; then
+          PATH="$HOME/code/go/bin:$PATH"
+      fi

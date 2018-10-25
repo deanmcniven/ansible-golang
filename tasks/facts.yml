@@ -1,0 +1,8 @@
+---
+- name: Set facts for go paths
+  become: false
+  set_fact:
+    go_path: "{{ local_user_homedir }}/code/go"
+    go_bin_path: "{{ local_user_homedir }}/code/go/bin"
+  changed_when: false
+
