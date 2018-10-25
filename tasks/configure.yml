@@ -14,7 +14,7 @@
   file:
     path: "{{ go_path }}/src/{{ item }}"
     state: directory
-  with_items: golang_additional_src_dirs
+  with_items: "{{ golang_additional_src_dirs }}"
   when: golang_additional_src_dirs is defined
 
 - name: Set GOPATH in profile
