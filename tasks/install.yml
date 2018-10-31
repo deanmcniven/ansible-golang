@@ -4,3 +4,4 @@
   unarchive:
     src: "{{ go_download_url }}"
     dest: /usr/local/
+    remote_src: yes
