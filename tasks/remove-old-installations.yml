@@ -1,0 +1,14 @@
+---
+- name: Ensure system packaged Golang Uninstalled
+  become: true
+  apt:
+    name: golang-go
+    state: absent
+
+- name: Remove old go Installation
+  become: true
+  file:
+    path: /usr/local/go
+    state: absent
+  when: (go_installed == True) and (go_installed_version != go_version)
+

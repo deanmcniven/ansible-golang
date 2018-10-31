@@ -1,5 +1,6 @@
 ---
 - include: facts.yml
+- include: remove-old-installations.yml
 - include: install.yml
 - include: configure.yml
 

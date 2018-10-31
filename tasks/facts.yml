@@ -6,3 +6,43 @@
     go_bin_path: "{{ local_user_homedir }}/code/go/bin"
   changed_when: false
 
+- name: Get golang download page content
+  become: false
+  uri:
+    url: https://golang.org/dl/
+    return_content: yes
+  register: golang_dl_page
+  changed_when: false
+
+- name: Set Download URL
+  become: false
+  set_fact:
+    go_download_url: "{{ golang_dl_page.content | regex_findall('https://dl\\.google\\.com/go/go\\d+\\.\\d+\\.\\d+\\.linux-amd64\\.tar\\.gz') | unique | first }}"
+
+- name: Set Other Facts
+  set_fact:
+    go_filename: "{{ go_download_url | regex_search('go\\d+\\.\\d+\\.\\d+\\.linux-amd64\\.tar\\.gz') }}"
+    go_version: "{{ go_download_url | regex_search('\\d+\\.\\d+\\.\\d+') }}"
+
+- name: Check if GO is installed
+  become: true
+  stat:
+    path: /usr/local/go
+  register: old_go_result
+
+- name: Set GO Installed Fact
+  become: false
+  set_fact:
+    go_installed: "{{ old_go_result.stat.exists }}"
+
+- name: Get current GO version
+  become: true
+  set_fact:
+    go_installed_version: "{{lookup('file', '/usr/local/go/VERSION') | regex_search('\\d+\\.\\d+\\.\\d+') }}"
+  when: go_installed == True
+
+- name: Set current GO version to not_installed
+  become: false
+  set_fact:
+    go_installed_version: not_installed
+  when: go_installed == False

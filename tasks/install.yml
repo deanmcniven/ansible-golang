@@ -1,7 +1,6 @@
 ---
-- name: Install Golang
+- name: Install go {{ go_version }}
   become: true
-  apt:
-    name: golang-go
-    state: present
-
+  unarchive:
+    src: "{{ go_download_url }}"
+    dest: /usr/local/
