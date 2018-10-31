@@ -5,3 +5,4 @@
     src: "{{ go_download_url }}"
     dest: /usr/local/
     remote_src: yes
+  when: go_installed_version != go_version
