@@ -6,3 +6,12 @@
     dest: /usr/local/
     remote_src: yes
   when: go_installed_version != go_version
+
+- name: Add GO binary to system PATH
+  become: true
+  blockinfile:
+    path: "/etc/profile"
+    marker_begin: "BEGIN GOINSTALLPATH"
+    marker_end: "END GOINSTALLPATH"
+    block: |
+      export PATH="$PATH:/usr/local/go/bin"
