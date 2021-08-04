@@ -17,7 +17,7 @@
 - name: Set Download URL
   become: false
   set_fact:
-    go_download_url: "{{ golang_dl_page.content | regex_findall('https://dl\\.google\\.com/go/go\\d+\\.\\d+\\.\\d+\\.linux-amd64\\.tar\\.gz') | unique | first }}"
+    go_download_url: "https://golang.org{{ golang_dl_page.content | regex_findall('/dl/go\\d+\\.\\d+\\.\\d+\\.linux-amd64\\.tar\\.gz') | unique | first }}"
 
 - name: Set Other Facts
   set_fact:
